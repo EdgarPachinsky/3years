@@ -206,13 +206,20 @@ type Phase = 'intro' | 'question' | 'feedback' | 'result';
       min-height: 0;
       flex-direction: column;
       gap: 12px;
-      padding: 4px 4px 0;
+      padding: 4px 0 0;
     }
 
     .bar {
       flex: none;
+      /* line the progress bar up with the cards below it */
+      padding: 0 6px;
     }
 
+    /*
+     * overflow-y: auto makes overflow-x: auto too, and that clips at the
+     * padding box — so the pixel borders, which are box-shadows painted 4px
+     * OUTSIDE each card, need horizontal padding here or they get cut off.
+     */
     .stage {
       flex: 1;
       min-height: 0;
@@ -220,7 +227,7 @@ type Phase = 'intro' | 'question' | 'feedback' | 'result';
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding-bottom: 8px;
+      padding: 0 6px 8px;
     }
   `,
 })

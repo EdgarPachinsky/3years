@@ -50,7 +50,7 @@ const ICONS: Record<string, string> = {
 
     .q__text {
       margin: 0;
-      padding: 16px 14px;
+      padding: 16px 12px;
       font-family: var(--f-text);
       font-size: var(--t-lg);
       line-height: 1.4;
@@ -69,16 +69,16 @@ const ICONS: Record<string, string> = {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      padding: 4px;
+      padding: 4px 0;
     }
 
     .opt {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       width: 100%;
       min-height: var(--tap);
-      padding: 14px;
+      padding: 14px 12px;
       text-align: left;
       background: var(--panel-2);
       border: 0;
@@ -108,7 +108,7 @@ const ICONS: Record<string, string> = {
 
     .opt__icon {
       flex: none;
-      width: 28px;
+      width: 22px;
       text-align: center;
       font-size: var(--t-md);
       color: var(--accent);
