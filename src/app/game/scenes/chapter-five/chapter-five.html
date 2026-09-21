@@ -1,0 +1,351 @@
+@if (viewingCard()) {
+  <div class="pane">
+    <app-character-card
+      [stats]="five.stats()"
+      [klass]="five.characterClass()"
+      [inventory]="five.inventory()"
+      [genre]="five.genre()"
+      [quest]="five.quest()"
+      [level]="five.level()"
+      [reveal]="8"
+    />
+    <div class="cta">
+      <app-pixel-button tone="soft" (pressed)="hideCard()">↩ BACK</app-pixel-button>
+    </div>
+  </div>
+} @else {
+  @switch (stage()) {
+    @case ('intro') {
+      <div class="pane pane--centre">
+        <app-pixel-particles [count]="7" sprite="sparkle" />
+        <p class="kicker">{{ copy.code }}</p>
+        <h1 class="title">{{ copy.title }}</h1>
+        <div class="rule"></div>
+        @for (line of copy.intro.lines; track line) {
+          <p class="lede">{{ line }}</p>
+        }
+        <div class="rule"></div>
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="begin()">{{
+            copy.intro.button
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+
+    @case ('build') {
+      <div class="pane pane--centre">
+        <p class="heading">{{ copy.build.heading }}</p>
+        <div class="duo">
+          <span class="duo__tag">{{ copy.build.playerOne }}</span>
+          <span class="duo__tag">{{ copy.build.playerTwo }}</span>
+        </div>
+        <app-coop-players [together]="together()" [scale]="5" />
+        <div class="panel">
+          <p class="panel__label">{{ copy.build.classLabel }}</p>
+          <p class="panel__value">{{ copy.build.className }}</p>
+        </div>
+        <p class="note">{{ copy.build.detected }}</p>
+        <app-quiz-progress
+          [label]="copy.build.initializing"
+          [value]="initProgress()"
+          [blocks]="20"
+          [showPercent]="false"
+        />
+        @if (initProgress() >= 1) {
+          <p class="ok anim-pop">{{ copy.build.ready }}</p>
+        }
+      </div>
+    }
+
+    @case ('stats') {
+      <div class="pane">
+        <p class="heading">{{ copy.stats.heading }}</p>
+        <p class="note">{{ copy.stats.hint }}</p>
+        <div class="sliders">
+          @for (stat of statDefs; track stat.id) {
+            <app-stat-slider
+              [stat]="stat"
+              [value]="statValue(stat.id)"
+              (changed)="setStat(stat.id, $event)"
+            />
+          }
+        </div>
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="statsDone()">{{
+            copy.stats.button
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+
+    @case ('stats-result') {
+      <div class="pane">
+        <p class="ok">{{ copy.stats.complete }}</p>
+        <p class="heading">{{ copy.stats.resultHeading }}</p>
+        <app-stat-bars [stats]="five.stats()" [definitions]="statDefs" [reveal]="statsReveal()" />
+        <div class="panel anim-rise">
+          <p class="panel__label">{{ copy.stats.classLabel }}</p>
+          <p class="panel__value">{{ five.characterClass().title }}</p>
+          <p class="panel__note">{{ five.characterClass().description }}</p>
+        </div>
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="next('inventory')">{{
+            copy.buttons.next
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+
+    @case ('inventory') {
+      <div class="pane">
+        <p class="heading">{{ copy.inventory.heading }}</p>
+        <p class="note">{{ copy.inventory.subtitle }}</p>
+        <app-inventory-picker
+          [items]="items"
+          [chosen]="five.inventory()"
+          [limit]="five.limit"
+          [counterLabel]="copy.inventory.counter"
+          (toggled)="toggleItem($event)"
+        />
+        @if (five.full()) {
+          <p class="ok anim-pop">{{ copy.inventory.acquired }}</p>
+          <div class="cta">
+            <app-pixel-button tone="primary" (pressed)="next('genre')">{{
+              copy.buttons.next
+            }}</app-pixel-button>
+          </div>
+        }
+      </div>
+    }
+
+    @case ('genre') {
+      <div class="pane">
+        <p class="heading">{{ copy.genre.heading }}</p>
+        <p class="note">{{ copy.genre.question }}</p>
+        <div class="cards">
+          @for (genre of genres; track genre.id) {
+            <app-choice-card
+              [icon]="genre.icon"
+              [title]="genre.title"
+              [subtitle]="genre.description"
+              [selected]="five.genreId() === genre.id"
+              (picked)="pickGenre(genre.id)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    @case ('genre-result') {
+      @if (five.genre(); as genre) {
+        <div class="pane">
+          <app-pixel-particles [count]="6" sprite="sparkle" />
+          <p class="heading">{{ genre.resultTitle }}</p>
+          <div class="sheet">
+            @for (row of genre.resultLines; track row.label + row.value) {
+              <div class="sheet__row">
+                @if (row.label) {
+                  <p class="sheet__label">{{ row.label }}</p>
+                }
+                <p class="sheet__value">{{ row.value }}</p>
+              </div>
+            }
+          </div>
+          <div class="cta">
+            <app-pixel-button tone="primary" (pressed)="next('quests')">{{
+              copy.buttons.next
+            }}</app-pixel-button>
+          </div>
+        </div>
+      }
+    }
+
+    @case ('quests') {
+      <div class="pane">
+        <app-quest-log [heading]="copy.quests.heading" [done]="quests.completed" />
+        <p class="heading">{{ copy.quests.chooseHeading }}</p>
+        <p class="note">{{ copy.quests.chooseSub }}</p>
+        <div class="cards">
+          @for (quest of quests.available; track quest.id) {
+            <app-choice-card
+              [icon]="quest.icon ?? '○'"
+              [title]="quest.title"
+              [selected]="five.questId() === quest.id"
+              (picked)="pickQuest(quest.id)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    @case ('quest-result') {
+      <div class="pane">
+        <app-pixel-particles [count]="8" sprite="heart" />
+        <p class="ok">{{ copy.quests.added }}</p>
+        @if (five.quest(); as quest) {
+          <div class="panel">
+            <p class="panel__value">{{ quest.icon }} {{ quest.title }}</p>
+            <p class="panel__label">{{ copy.quests.status }}</p>
+            <p class="panel__note">{{ copy.quests.locked }}</p>
+          </div>
+        }
+        <p class="note">{{ copy.quests.someday }} ❤️</p>
+        <app-quest-log
+          [heading]="copy.quests.heading"
+          [done]="quests.completed"
+          [pending]="pendingQuests()"
+        />
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="toCoop()">{{
+            copy.buttons.next
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+
+    @case ('coop') {
+      <div class="pane pane--centre pane--dark">
+        <p class="heading">{{ copy.coop.heading }}</p>
+        <div class="panel">
+          <p class="panel__label">{{ copy.build.playerOne }}</p>
+          <p class="panel__value">{{ players.one.label }}</p>
+          <p class="panel__label">{{ copy.build.playerTwo }}</p>
+          <p class="panel__value">{{ players.two.label }}</p>
+        </div>
+        <app-coop-players [together]="together()" [scale]="5" [showLabels]="false" />
+        @if (coopStep() >= 1) {
+          <p class="note anim-pop">{{ copy.coop.detected }}</p>
+        }
+        @if (coopStep() >= 2) {
+          <div class="panel anim-rise">
+            <p class="panel__label">{{ copy.coop.statusLabel }}</p>
+            <p class="panel__value">{{ copy.coop.connected }}</p>
+            <p class="panel__label">{{ copy.coop.modeLabel }}</p>
+            <p class="panel__value panel__value--warm">{{ copy.coop.online }}</p>
+          </div>
+        }
+        @if (coopStep() >= 3) {
+          <p class="ok anim-pop">{{ copy.coop.activated }}</p>
+        }
+      </div>
+    }
+
+    @case ('message') {
+      <div class="pane pane--centre pane--dark">
+        @for (line of copy.message.lines; track line; let i = $index) {
+          @if (messageStep() > i) {
+            <p class="message anim-rise">{{ line }}</p>
+          }
+        }
+        @if (messageStep() > copy.message.lines.length) {
+          <div class="outro anim-rise">
+            <p class="note">{{ players.one.label }} + {{ players.two.label }}</p>
+            <p class="heading">{{ copy.message.outro }}</p>
+            <div class="cta">
+              <app-pixel-button tone="primary" (pressed)="next('level')">{{
+                copy.buttons.next
+              }}</app-pixel-button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @case ('level') {
+      <div class="pane">
+        <div class="panel panel--centre">
+          <p class="panel__label">{{ copy.level.currentLabel }}</p>
+          <p class="panel__value">{{ copy.level.currentName }}</p>
+          <p class="level">{{ copy.level.currentLevel }}</p>
+          <p class="hearts">
+            @for (h of heartRow(); track h) {
+              <span>❤️</span>
+            }
+          </p>
+        </div>
+        <div class="panel panel--centre">
+          <p class="panel__label">{{ copy.level.nextLabel }}</p>
+          <p class="panel__value">{{ copy.level.unknown }}</p>
+        </div>
+        <p class="note">{{ copy.level.question }}</p>
+        <div class="cards">
+          @for (choice of levels; track choice.id) {
+            <app-choice-card
+              [icon]="choice.icon"
+              [title]="choice.title"
+              [selected]="five.levelId() === choice.id"
+              (picked)="pickLevel(choice.id)"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    @case ('level-result') {
+      <div class="pane pane--centre">
+        <app-pixel-particles [count]="10" sprite="heart" />
+        <p class="ok">{{ copy.level.accepted }}</p>
+        @if (five.level(); as choice) {
+          <p class="title">{{ choice.icon }} {{ choice.resultText }}</p>
+        }
+        <p class="note">{{ players.one.label }} + {{ players.two.label }}</p>
+        <p class="note">{{ copy.level.ready }}</p>
+        <p class="big">❤️</p>
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="toCard()">{{
+            copy.buttons.next
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+
+    @case ('card') {
+      <div class="pane">
+        <p class="note">{{ cardReveal() >= 8 ? copy.card.done : copy.card.building }}</p>
+        <ul class="steps">
+          @for (step of copy.card.steps; track step; let i = $index) {
+            <li [class.steps--on]="cardReveal() > i">
+              <span class="steps__mark">{{ cardReveal() > i ? '✓' : '·' }}</span> {{ step }}
+            </li>
+          }
+        </ul>
+        <app-character-card
+          [stats]="five.stats()"
+          [klass]="five.characterClass()"
+          [inventory]="five.inventory()"
+          [genre]="five.genre()"
+          [quest]="five.quest()"
+          [level]="five.level()"
+          [reveal]="cardReveal()"
+        />
+        @if (cardReveal() >= 8) {
+          <div class="cta anim-rise">
+            <app-pixel-button tone="primary" (pressed)="finish()">{{
+              copy.buttons.next
+            }}</app-pixel-button>
+          </div>
+        }
+      </div>
+    }
+
+    @case ('complete') {
+      <div class="pane pane--centre">
+        <app-pixel-particles [count]="14" sprite="heart" />
+        <p class="ok">{{ copy.complete.heading }}</p>
+        @for (line of copy.complete.lines; track line) {
+          <p class="title">{{ line }}</p>
+        }
+        <p class="big">❤️</p>
+        <div class="cta">
+          <app-pixel-button tone="soft" (pressed)="showCard()">{{
+            copy.complete.viewCard
+          }}</app-pixel-button>
+          <app-pixel-button tone="primary" (pressed)="leave()">{{
+            copy.complete.cont
+          }}</app-pixel-button>
+        </div>
+      </div>
+    }
+  }
+}

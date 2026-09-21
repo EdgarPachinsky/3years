@@ -1,0 +1,113 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: var(--frame-max);
+  margin: 0 auto;
+}
+
+.device {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  transition: background 0.6s ease;
+}
+
+@media (width >= 560px) {
+  .device {
+    min-height: min(880px, calc(100dvh - 48px));
+    box-shadow:
+      0 -6px 0 0 var(--border),
+      0 6px 0 0 var(--border),
+      -6px 0 0 0 var(--border),
+      6px 0 0 0 var(--border),
+      0 22px 60px rgb(0 0 0 / 55%);
+  }
+}
+
+.hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex: none;
+  padding: max(10px, env(safe-area-inset-top)) 14px 10px;
+  z-index: 25;
+}
+
+.hud__tools {
+  display: flex;
+  gap: 8px;
+}
+
+.tool {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  font-family: var(--f-ui);
+  font-size: var(--t-md);
+  color: var(--text-dim);
+  background: transparent;
+  border: 3px solid var(--panel-2);
+  cursor: pointer;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.tool--on {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.view {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 10px calc(10px + env(safe-area-inset-bottom));
+}
+
+.resume {
+  position: absolute;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgb(10 5 14 / 94%);
+}
+
+.resume__box {
+  width: 100%;
+  max-width: 300px;
+  padding: 20px 16px;
+  text-align: center;
+  background: var(--panel);
+  box-shadow:
+    0 -4px 0 0 var(--border),
+    0 4px 0 0 var(--border),
+    -4px 0 0 0 var(--border),
+    4px 0 0 0 var(--border);
+}
+
+.resume__title {
+  margin: 0 0 8px;
+  font-family: var(--f-pixel);
+  font-size: var(--t-sm);
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+
+.resume__line {
+  margin: 0 0 18px;
+  font-family: var(--f-text);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  color: var(--text);
+}

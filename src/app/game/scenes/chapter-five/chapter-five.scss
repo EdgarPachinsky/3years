@@ -1,0 +1,275 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+
+.pane {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px 6px 20px;
+  overflow-y: auto;
+}
+
+.pane--centre {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.pane--dark {
+  background: var(--screen);
+  box-shadow:
+    0 -4px 0 0 var(--border),
+    0 4px 0 0 var(--border),
+    -4px 0 0 0 var(--border),
+    4px 0 0 0 var(--border);
+  margin: 0 4px;
+}
+
+.kicker {
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: var(--t-sm);
+  letter-spacing: 0.3em;
+  color: var(--text-dim);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--f-pixel);
+  font-size: var(--t-lg);
+  line-height: 1.5;
+  color: var(--text);
+  text-shadow: 0 4px 0 var(--border);
+}
+
+.heading {
+  margin: 0;
+  font-family: var(--f-pixel);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-align: center;
+}
+
+.lede {
+  margin: 0;
+  font-family: var(--f-text);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.note {
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: var(--t-xs);
+  letter-spacing: 0.14em;
+  line-height: 1.6;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.ok {
+  margin: 0;
+  font-family: var(--f-pixel);
+  font-size: var(--t-sm);
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-align: center;
+}
+
+.big {
+  margin: 0;
+  font-size: var(--t-xl);
+}
+
+.rule {
+  width: 72px;
+  height: 4px;
+  background: repeating-linear-gradient(90deg, var(--accent) 0 4px, transparent 4px 8px);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  padding: 12px;
+  background: var(--panel);
+  box-shadow:
+    0 -4px 0 0 var(--border),
+    0 4px 0 0 var(--border),
+    -4px 0 0 0 var(--border),
+    4px 0 0 0 var(--border);
+}
+
+.panel--centre {
+  align-items: center;
+  text-align: center;
+}
+
+.panel__label {
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: var(--t-xs);
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+}
+
+.panel__value {
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: var(--t-sm);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+.panel__value--warm {
+  color: var(--accent);
+}
+
+.panel__note {
+  margin: 0;
+  font-family: var(--f-text);
+  font-size: var(--t-sm);
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+
+.duo {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+}
+
+.duo__tag {
+  font-family: var(--f-ui);
+  font-size: var(--t-xs);
+  letter-spacing: 0.16em;
+  color: var(--text-dim);
+}
+
+.sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 12px;
+  background: var(--panel);
+  box-shadow:
+    0 -4px 0 0 var(--border),
+    0 4px 0 0 var(--border),
+    -4px 0 0 0 var(--border),
+    4px 0 0 0 var(--border);
+}
+
+.sheet__row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sheet__label {
+  margin: 0;
+  font-family: var(--f-ui);
+  font-size: var(--t-xs);
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+}
+
+.sheet__value {
+  margin: 0;
+  font-family: var(--f-text);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  white-space: pre-line;
+  color: var(--text);
+}
+
+.message {
+  margin: 0;
+  font-family: var(--f-text);
+  font-size: var(--t-lg);
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.outro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.level {
+  margin: 0;
+  font-family: var(--f-pixel);
+  font-size: var(--t-lg);
+  color: var(--accent-2);
+}
+
+.hearts {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: var(--t-md);
+}
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 10px;
+}
+
+.steps li {
+  font-family: var(--f-ui);
+  font-size: var(--t-xs);
+  letter-spacing: 0.1em;
+  color: var(--text-dim);
+  opacity: 0.5;
+  transition: opacity 0.25s ease;
+}
+
+.steps li.steps--on {
+  color: var(--text);
+  opacity: 1;
+}
+
+.steps__mark {
+  color: var(--accent);
+}
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px;
+  margin: 6px auto 0;
+}

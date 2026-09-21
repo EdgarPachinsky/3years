@@ -1,0 +1,88 @@
+<div class="device" [attr.data-theme]="game.theme()">
+  @if (game.scene() !== 'glitch') {
+    <header class="hud">
+      <app-progress-indicator [earned]="game.hearts()" [total]="game.totalChapters" />
+
+      <div class="hud__tools">
+        @if (showMenuButton()) {
+          <button
+            type="button"
+            class="tool"
+            aria-label="Chapter menu"
+            title="Chapter menu"
+            (click)="game.openMenu()"
+          >
+            <app-pixel-sprite name="menu" [scale]="3" />
+          </button>
+        }
+        <button
+          type="button"
+          class="tool"
+          [class.tool--on]="audio.sfxOn()"
+          [attr.aria-pressed]="audio.sfxOn()"
+          aria-label="Sound effects"
+          (click)="audio.toggleSfx()"
+        >
+          {{ audio.sfxOn() ? '♥' : '♡' }}
+        </button>
+        <button
+          type="button"
+          class="tool"
+          [class.tool--on]="audio.musicOn()"
+          [attr.aria-pressed]="audio.musicOn()"
+          aria-label="Music"
+          (click)="audio.toggleMusic()"
+        >
+          ♪
+        </button>
+      </div>
+    </header>
+  }
+
+  <main class="view">
+    @switch (game.scene()) {
+      @case ('friend-request') {
+        <app-friend-request />
+      }
+      @case ('chapter-one') {
+        <app-chapter-one />
+      }
+      @case ('chapter-two') {
+        <app-chapter-two />
+      }
+      @case ('memory-check') {
+        <app-memory-check />
+      }
+      @case ('chapter-three') {
+        <app-chapter-three />
+      }
+      @case ('chapter-four') {
+        <app-chapter-four />
+      }
+      @case ('chapter-five') {
+        <app-chapter-five />
+      }
+      @case ('menu') {
+        <app-main-menu />
+      }
+      @case ('chapter-teaser') {
+        <app-chapter-teaser />
+      }
+    }
+  </main>
+
+  @if (game.scene() === 'glitch') {
+    <app-glitch-transition (complete)="afterGlitch()" />
+  }
+
+  @if (game.resumeScene()) {
+    <div class="resume">
+      <div class="resume__box">
+        <p class="resume__title">SAVE FILE FOUND</p>
+        <p class="resume__line">You stopped somewhere in the middle of us.</p>
+        <app-pixel-button tone="primary" (pressed)="game.resume()">CONTINUE ▸</app-pixel-button>
+        <app-pixel-button tone="ghost" (pressed)="game.restart()">START OVER ↺</app-pixel-button>
+      </div>
+    </div>
+  }
+</div>
