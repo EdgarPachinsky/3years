@@ -28,7 +28,10 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       [attr.aria-label]="found() ? 'Hidden digit found' : 'Something is written here'"
       (click)="take()"
     >
-      <span class="chip__text">{{ prefix() }}{{ digit() }}</span>
+      <span class="chip__text">
+        <span class="chip__prefix">{{ prefix() }}</span
+        ><span class="chip__digit">{{ digit() }}</span>
+      </span>
       @if (found()) {
         <span class="chip__tick" aria-hidden="true">✓</span>
       }
@@ -45,7 +48,7 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
     :host {
       position: relative;
       display: inline-block;
-      line-height: 0;
+      line-height: 1;
     }
 
     .chip {
@@ -62,10 +65,39 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       background: transparent;
       border: 0;
       cursor: pointer;
-      opacity: 0.55;
+      opacity: 0.9;
       transition:
         opacity 0.25s ease,
         color 0.25s ease;
+    }
+
+    /* a dotted rule under the whole tag says "this one can be tapped" */
+    .chip__text {
+      /* the host sits on line-height: 0 — give the text its own box back so
+         the dotted rule lands under it, not through it */
+      line-height: 1.4;
+      padding-bottom: 2px;
+      white-space: pre;
+      border-bottom: 2px dotted var(--text-dim);
+    }
+
+    /* the number itself reads a shade warmer than the label around it */
+    .chip__digit {
+      color: var(--accent);
+      animation: digit-hint 2.6s ease-in-out infinite;
+    }
+
+    /* a slow, quiet breath — enough to catch the eye, not enough to shout */
+    @keyframes digit-hint {
+      0%,
+      100% {
+        opacity: 0.75;
+        text-shadow: none;
+      }
+      50% {
+        opacity: 1;
+        text-shadow: 0 0 6px var(--glow);
+      }
     }
 
     .chip:active {
@@ -75,6 +107,16 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
     .chip--found {
       opacity: 1;
       color: var(--accent);
+    }
+
+    /* once it is collected it stops asking for attention */
+    .chip--found .chip__text {
+      border-bottom-color: transparent;
+    }
+
+    .chip--found .chip__digit {
+      animation: none;
+      opacity: 1;
     }
 
     .chip__tick {

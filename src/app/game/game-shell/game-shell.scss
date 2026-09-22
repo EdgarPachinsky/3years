@@ -11,7 +11,9 @@
   flex-direction: column;
   width: 100%;
   min-height: 100dvh;
-  overflow: hidden;
+  /* clip, not hidden: hidden would make .device its own scroll container,
+     which stops the sticky HUD below from sticking to the page */
+  overflow: clip;
   background: var(--bg);
   transition: background 0.6s ease;
 }
@@ -29,12 +31,17 @@
 }
 
 .hud {
+  /* stays at the top of the screen even if the page itself ends up scrolling */
+  position: sticky;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   flex: none;
   padding: max(10px, env(safe-area-inset-top)) 14px 10px;
+  background: var(--bg);
+  transition: background 0.6s ease;
   z-index: 25;
 }
 

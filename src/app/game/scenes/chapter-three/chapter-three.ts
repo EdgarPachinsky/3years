@@ -155,11 +155,15 @@ type Phase = 'intro' | 'loading' | 'playing' | 'solved' | 'outro';
     }
 
     .peek {
+      /* small enough to stay on one line beside MOSAIC .. / .. and the reel */
+      flex: none;
       min-height: 40px;
-      padding: 8px 12px;
+      padding: 6px 8px;
       font-family: var(--f-ui);
-      font-size: var(--t-xs);
-      letter-spacing: 0.12em;
+      font-size: clamp(7px, 2.1vw, 9px);
+      letter-spacing: 0.05em;
+      line-height: 1.2;
+      white-space: nowrap;
       color: var(--text-dim);
       background: transparent;
       border: 3px solid var(--panel-2);

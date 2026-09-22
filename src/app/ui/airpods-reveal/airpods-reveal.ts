@@ -20,7 +20,7 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [PixelParticles],
   template: `
-    <div class="stage" [attr.data-step]="step()">
+    <div class="pods" [attr.data-step]="step()">
       <span class="glow" aria-hidden="true"></span>
       <span class="floor" aria-hidden="true"></span>
 
@@ -42,7 +42,7 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       display: block;
     }
 
-    .stage {
+    .pods {
       position: relative;
       display: grid;
       place-items: center;
@@ -85,12 +85,12 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       transition: opacity 0.9s ease;
     }
 
-    .stage[data-step='0'] .glow,
-    .stage[data-step='0'] .floor {
+    .pods[data-step='0'] .glow,
+    .pods[data-step='0'] .floor {
       opacity: 0;
     }
-    .stage:not([data-step='0']) .glow,
-    .stage:not([data-step='0']) .floor {
+    .pods:not([data-step='0']) .glow,
+    .pods:not([data-step='0']) .floor {
       opacity: 1;
     }
 
@@ -106,7 +106,7 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
         transform 0.7s cubic-bezier(0.2, 0.8, 0.3, 1);
     }
 
-    .stage:not([data-step='0']) .case {
+    .pods:not([data-step='0']) .case {
       opacity: 1;
       transform: translateY(0) scale(1);
     }
@@ -163,9 +163,9 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       z-index: 4;
     }
 
-    .stage[data-step='2'] .lid,
-    .stage[data-step='3'] .lid,
-    .stage[data-step='4'] .lid {
+    .pods[data-step='2'] .lid,
+    .pods[data-step='3'] .lid,
+    .pods[data-step='4'] .lid {
       transform: rotateX(-112deg);
     }
 
@@ -221,15 +221,15 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
       right: 28px;
     }
 
-    .stage[data-step='3'] .bud,
-    .stage[data-step='4'] .bud {
+    .pods[data-step='3'] .bud,
+    .pods[data-step='4'] .bud {
       opacity: 1;
       /* high enough that the stems clear the case and read as AirPods */
       transform: translateY(-52px);
     }
 
-    .stage[data-step='3'] .bud--r,
-    .stage[data-step='4'] .bud--r {
+    .pods[data-step='3'] .bud--r,
+    .pods[data-step='4'] .bud--r {
       transition-delay: 0.12s;
     }
 
@@ -249,8 +249,8 @@ import { PixelParticles } from '../pixel-particles/pixel-particles';
         box-shadow 0.5s ease;
     }
 
-    .stage[data-step='3'] .light,
-    .stage[data-step='4'] .light {
+    .pods[data-step='3'] .light,
+    .pods[data-step='4'] .light {
       background: #5ad07a;
       box-shadow: 0 0 10px 2px rgb(90 208 122 / 70%);
     }
