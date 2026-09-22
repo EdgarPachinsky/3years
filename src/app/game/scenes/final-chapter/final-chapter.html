@@ -1,0 +1,188 @@
+@switch (stage()) {
+  @case ('locked') {
+    <div class="pane pane--centre">
+      <p class="kicker">{{ copy.code }}</p>
+      <h1 class="title">{{ copy.title }}</h1>
+      <p class="locks">{{ copy.lock.locks }}</p>
+      <p class="required">{{ copy.lock.required }}</p>
+
+      <app-password-lock
+        [denied]="denied()"
+        (changed)="onType($event)"
+        (completed)="onType($event)"
+      />
+
+      <p class="found">
+        {{ copy.lock.foundLabel }}
+        <span class="found__n">{{ surprise.foundCount() }} / 4</span>
+      </p>
+
+      @if (denied()) {
+        <div class="panel panel--bad anim-pop">
+          <p class="panel__title">{{ copy.lock.deniedTitle }}</p>
+          <p class="panel__body">{{ copy.lock.denied }}</p>
+        </div>
+        <div class="cta">
+          <app-pixel-button tone="soft" (pressed)="retry()">{{
+            copy.lock.tryAgain
+          }}</app-pixel-button>
+        </div>
+      } @else {
+        <div class="panel">
+          <p class="panel__label">{{ copy.lock.hintLabel }}</p>
+          <p class="panel__body">{{ copy.lock.hint }}</p>
+        </div>
+        <div class="cta">
+          <app-pixel-button tone="primary" [disabled]="!canTry()" (pressed)="tryUnlock()">
+            {{ copy.lock.unlock }}
+          </app-pixel-button>
+        </div>
+      }
+    </div>
+  }
+
+  @case ('granted') {
+    <div class="pane pane--centre">
+      <app-pixel-particles [count]="10" sprite="sparkle" />
+      <p class="ok">{{ copy.lock.grantedTitle }}</p>
+      <app-quiz-progress [value]="calc()" [blocks]="20" [showPercent]="false" [centred]="true" />
+      <p class="title">{{ copy.lock.granted }}</p>
+    </div>
+  }
+
+  @case ('boxes') {
+    <div class="pane pane--centre">
+      <h1 class="title">{{ copy.boxes.heading }}</h1>
+      <p class="note">{{ copy.boxes.sub }}</p>
+      <div class="boxes">
+        @for (box of boxes; track box.id) {
+          <button type="button" class="box" (click)="pickBox(box)">
+            <span class="box__icon">{{ box.icon }}</span>
+            <span class="box__title">{{ box.title }}</span>
+            @if (box.description) {
+              <span class="box__sub">{{ box.description }}</span>
+            }
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  @case ('opening') {
+    <div class="pane pane--centre">
+      <app-pixel-particles [count]="10" sprite="sparkle" />
+      <p class="box__icon box__icon--big anim-pop">🎁</p>
+      <p class="ok">{{ copy.boxes.opening }}</p>
+    </div>
+  }
+
+  @case ('game') {
+    <div class="pane">
+      @if (box(); as chosen) {
+        @switch (chosen.game) {
+          @case ('catch-hearts') {
+            <app-mini-catch [reduceMotion]="reduce()" (finished)="gameDone()" />
+          }
+          @case ('easy-math') {
+            <app-mini-math (finished)="gameDone()" />
+          }
+          @case ('memory') {
+            <app-mini-memory [reduceMotion]="reduce()" (finished)="gameDone()" />
+          }
+        }
+      }
+    </div>
+  }
+
+  @case ('calculating') {
+    <div class="pane pane--centre">
+      <p class="ok">{{ copy.games.rewardLabel }}</p>
+      <p class="note">{{ copy.calculating.label }}</p>
+      <app-quiz-progress [value]="calc()" [blocks]="20" [showPercent]="false" [centred]="true" />
+      @if (calc() >= 1) {
+        <p class="title anim-pop">{{ copy.calculating.found }}</p>
+      }
+    </div>
+  }
+
+  @case ('reveal') {
+    <div class="pane pane--centre">
+      <app-airpods-reveal [instant]="reduce()" (done)="onRevealDone()" />
+      @if (revealDone()) {
+        <div class="reveal anim-rise">
+          <p class="title">{{ copy.reveal.title }}</p>
+          <div class="panel panel--quiet">
+            <p class="panel__label">{{ copy.reveal.statusLabel }}</p>
+            <p class="panel__value">{{ copy.reveal.status }}</p>
+            <p class="panel__label">{{ copy.reveal.arrivalLabel }}</p>
+            <p class="panel__value panel__value--warm">{{ copy.reveal.arrival }}</p>
+          </div>
+          <div class="cta">
+            <app-pixel-button tone="primary" (pressed)="toMessages()">{{
+              copy.buttons.next
+            }}</app-pixel-button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  @case ('messages') {
+    <div class="pane pane--centre">
+      @for (message of copy.reveal.messages; track message; let i = $index) {
+        @if (messageStep() > i) {
+          <p class="message anim-rise">{{ message }}</p>
+        }
+      }
+
+      @if (messageStep() > copy.reveal.messages.length) {
+        <ul class="gifts anim-rise">
+          @for (gift of copy.reveal.gifts; track gift.text) {
+            <li>
+              <span class="gifts__icon">{{ gift.icon }}</span> {{ gift.text }}
+            </li>
+          }
+        </ul>
+        <div class="cta">
+          <app-pixel-button tone="primary" (pressed)="toEnding()">{{
+            copy.buttons.next
+          }}</app-pixel-button>
+        </div>
+      }
+    </div>
+  }
+
+  @case ('ending') {
+    <div class="pane pane--centre">
+      <app-pixel-particles [count]="14" sprite="heart" />
+      <h1 class="title">{{ copy.ending.heading }}</h1>
+
+      <ul class="gifts">
+        @for (item of copy.ending.items; track item.text) {
+          <li>
+            <span class="gifts__icon">{{ item.icon }}</span> {{ item.text }}
+          </li>
+        }
+      </ul>
+
+      <div class="panel panel--quiet">
+        <p class="panel__label">{{ copy.ending.actualLabel }}</p>
+        <p class="panel__value panel__value--warm">{{ copy.ending.actual }}</p>
+        <p class="panel__label">{{ copy.ending.arrivingLabel }}</p>
+        <p class="panel__value">{{ copy.ending.arriving }}</p>
+      </div>
+
+      <div class="closing">
+        @for (line of copy.ending.lines; track line) {
+          <p class="closing__line">{{ line }}</p>
+        }
+      </div>
+
+      <div class="cta">
+        <app-pixel-button tone="ghost" (pressed)="toMenu()">{{
+          copy.buttons.menu
+        }}</app-pixel-button>
+      </div>
+    </div>
+  }
+}

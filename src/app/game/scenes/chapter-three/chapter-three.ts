@@ -16,6 +16,7 @@ import { LevelScreen } from '../../../ui/level-screen/level-screen';
 import { MosaicBoard } from '../../../ui/mosaic-board/mosaic-board';
 import { PixelButton } from '../../../ui/pixel-button/pixel-button';
 import { PixelParticles } from '../../../ui/pixel-particles/pixel-particles';
+import { HiddenDigit } from '../../../ui/hidden-digit/hidden-digit';
 
 type Phase = 'intro' | 'loading' | 'playing' | 'solved' | 'outro';
 
@@ -23,7 +24,7 @@ type Phase = 'intro' | 'loading' | 'playing' | 'solved' | 'outro';
 @Component({
   selector: 'app-chapter-three',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LevelScreen, MosaicBoard, PixelButton, PixelParticles],
+  imports: [LevelScreen, MosaicBoard, PixelButton, PixelParticles, HiddenDigit],
   template: `
     @switch (phase()) {
       @case ('intro') {
@@ -52,6 +53,7 @@ type Phase = 'intro' | 'loading' | 'playing' | 'solved' | 'outro';
         <div class="play">
           <header class="bar">
             <span class="bar__label">MOSAIC {{ pad(round() + 1) }} / {{ pad(total) }}</span>
+            <app-hidden-digit [chapter]="3" prefix="REEL " />
             @if (grid() > 2 && phase() === 'playing') {
               <button
                 type="button"

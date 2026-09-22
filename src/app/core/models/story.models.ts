@@ -12,6 +12,7 @@ export type SceneId =
   | 'chapter-three'
   | 'chapter-four'
   | 'chapter-five'
+  | 'final-chapter'
   | 'chapter-teaser'
   | 'menu';
 

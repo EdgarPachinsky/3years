@@ -51,6 +51,7 @@
           [value]="initProgress()"
           [blocks]="20"
           [showPercent]="false"
+          [centred]="true"
         />
         @if (initProgress() >= 1) {
           <p class="ok anim-pop">{{ copy.build.ready }}</p>

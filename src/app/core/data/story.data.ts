@@ -52,7 +52,13 @@ export const CHAPTERS: readonly ChapterMeta[] = [
     playable: true,
     entry: 'chapter-five',
   },
-  { index: 6, code: 'FINAL CHAPTER', title: 'ONE LAST SURPRISE', playable: false },
+  {
+    index: 6,
+    code: 'FINAL CHAPTER',
+    title: 'ONE LAST SURPRISE',
+    playable: true,
+    entry: 'final-chapter',
+  },
 ];
 
 /* ------------------------------------------------ JUNE 7, 2019 — 8:18 PM -- */

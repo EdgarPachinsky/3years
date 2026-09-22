@@ -12,12 +12,13 @@ import { AudioService } from '../../../core/services/audio.service';
 import { StorySequence } from '../../../ui/story-sequence/story-sequence';
 import { LevelScreen } from '../../../ui/level-screen/level-screen';
 import { PixelParticles } from '../../../ui/pixel-particles/pixel-particles';
+import { HiddenDigit } from '../../../ui/hidden-digit/hidden-digit';
 
 /** NOVEMBER 14, 2020 — 9:01 PM. Warmer. More alive. She wrote first. */
 @Component({
   selector: 'app-chapter-two',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [StorySequence, LevelScreen, PixelParticles],
+  imports: [StorySequence, LevelScreen, PixelParticles, HiddenDigit],
   template: `
     @if (phase() === 'card') {
       <div class="card" (click)="toChat()">
@@ -35,6 +36,7 @@ import { PixelParticles } from '../../../ui/pixel-particles/pixel-particles';
         <header class="win__bar">
           <span class="back" aria-hidden="true">‹</span>
           <span class="who">{{ chat.contactName }}</span>
+          <app-hidden-digit [chapter]="2" prefix="CH." />
           <span class="dot" aria-hidden="true"></span>
         </header>
 

@@ -12,6 +12,7 @@ import { AudioService } from '../../../core/services/audio.service';
 import { PixelButton } from '../../../ui/pixel-button/pixel-button';
 import { PixelSprite } from '../../../ui/pixel-sprite/pixel-sprite';
 import { PixelParticles } from '../../../ui/pixel-particles/pixel-particles';
+import { HiddenDigit } from '../../../ui/hidden-digit/hidden-digit';
 
 type Stage = 'request' | 'rejected' | 'accepted';
 
@@ -19,7 +20,7 @@ type Stage = 'request' | 'rejected' | 'accepted';
 @Component({
   selector: 'app-friend-request',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PixelButton, PixelSprite, PixelParticles],
+  imports: [PixelButton, PixelSprite, PixelParticles, HiddenDigit],
   template: `
     <div class="scene">
       <p class="stamp">
@@ -70,6 +71,7 @@ type Stage = 'request' | 'rejected' | 'accepted';
             }
           </div>
         </div>
+        <span class="serial"><app-hidden-digit [chapter]="1" prefix="PX-" /></span>
         <div class="led" aria-hidden="true"></div>
         <div class="neck" aria-hidden="true"></div>
         <div class="foot" aria-hidden="true"></div>
@@ -292,6 +294,12 @@ type Stage = 'request' | 'rejected' | 'accepted';
       font-family: var(--f-pixel);
       font-size: var(--t-xl);
       color: var(--accent-2);
+    }
+
+    .serial {
+      position: absolute;
+      left: 10px;
+      bottom: 0;
     }
 
     .led {

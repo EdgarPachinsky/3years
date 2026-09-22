@@ -13,6 +13,7 @@ import { MemoryCheck } from '../scenes/memory-check/memory-check';
 import { ChapterThree } from '../scenes/chapter-three/chapter-three';
 import { ChapterFour } from '../scenes/chapter-four/chapter-four';
 import { ChapterFive } from '../scenes/chapter-five/chapter-five';
+import { FinalChapter } from '../scenes/final-chapter/final-chapter';
 import { MainMenu } from '../scenes/main-menu/main-menu';
 import { ChapterTeaser } from '../scenes/chapter-teaser/chapter-teaser';
 
@@ -25,6 +26,7 @@ const WITH_MENU = new Set<SceneId>([
   'chapter-three',
   'chapter-four',
   'chapter-five',
+  'final-chapter',
   // the end screen too, otherwise it is a dead end with no way back
   'chapter-teaser',
 ]);
@@ -45,6 +47,7 @@ const WITH_MENU = new Set<SceneId>([
     ChapterThree,
     ChapterFour,
     ChapterFive,
+    FinalChapter,
     ChapterTeaser,
     MainMenu,
   ],

@@ -211,7 +211,7 @@ export class ChapterFive implements OnInit {
   }
 
   protected leave(): void {
-    this.game.go('chapter-teaser');
+    this.game.go('final-chapter');
   }
 
   protected go(stage: Stage): void {

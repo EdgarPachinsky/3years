@@ -1,4 +1,5 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
+import { FinalSurpriseService } from './final-surprise.service';
 import { ChapterMeta, SceneId, Theme } from '../models/story.models';
 import { TOTAL_CHAPTERS } from '../data/story.data';
 
@@ -21,6 +22,8 @@ const SCENE_THEME: Record<SceneId, Theme> = {
   'chapter-three': 'ch2',
   'chapter-four': 'ch2',
   'chapter-five': 'ch2',
+  // the quiet, warmer theme — the reward should not look like the quiz
+  'final-chapter': 'final',
   'chapter-teaser': 'ch2',
   menu: 'ch2',
 };
@@ -35,6 +38,7 @@ const SCENE_HEARTS: Record<SceneId, number> = {
   'chapter-three': 2,
   'chapter-four': 3,
   'chapter-five': 4,
+  'final-chapter': 5,
   'chapter-teaser': 5,
   menu: 0,
 };
@@ -49,12 +53,15 @@ const SCENE_CHAPTER: Record<SceneId, number> = {
   'chapter-three': 3,
   'chapter-four': 4,
   'chapter-five': 5,
+  'final-chapter': 6,
   'chapter-teaser': 5,
   menu: 1,
 };
 
 @Injectable({ providedIn: 'root' })
 export class GameStateService {
+  private readonly surprise = inject(FinalSurpriseService);
+
   private readonly _scene = signal<SceneId>(FIRST_SCENE);
   private readonly _hearts = signal(0);
   private readonly _maxChapter = signal(1);
@@ -125,10 +132,19 @@ export class GameStateService {
   }
 
   restart(): void {
+    // A new story means a new secret. Nothing else regenerates it.
+    this.surprise.newRun();
     this._resumeScene.set(null);
     this._hearts.set(0);
     this._maxChapter.set(1);
     this._scene.set(FIRST_SCENE);
+    this.write();
+  }
+
+  /** The story is finished — light every heart. */
+  completeStory(): void {
+    this._hearts.set(TOTAL_CHAPTERS);
+    this._maxChapter.set(TOTAL_CHAPTERS);
     this.write();
   }
 

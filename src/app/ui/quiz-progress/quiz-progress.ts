@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   selector: 'app-quiz-progress',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="db" [class.db--glitch]="glitch()">
+    <div class="db" [class.db--glitch]="glitch()" [class.db--centre]="centred()">
       @if (label()) {
         <p class="db__label">
           <span>{{ label() }}</span>
@@ -32,6 +32,21 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
       display: flex;
       flex-direction: column;
       gap: 4px;
+    }
+
+    /* opt-in: the whole readout sits centred inside a centred screen */
+    .db--centre {
+      align-items: center;
+    }
+
+    .db--centre .db__label {
+      justify-content: center;
+    }
+
+    .db--centre .db__bar,
+    .db--centre .db__pct,
+    .db--centre .db__status {
+      text-align: center;
     }
 
     .db--glitch .db__bar {
@@ -91,6 +106,8 @@ export class QuizProgress {
   readonly blocks = input(20);
   readonly showPercent = input(true);
   readonly glitch = input(false);
+  /** Centre the label, bar and percent — for screens that are centred themselves. */
+  readonly centred = input(false);
 
   protected readonly percent = computed(() =>
     Math.round(Math.min(1, Math.max(0, this.value())) * 100),

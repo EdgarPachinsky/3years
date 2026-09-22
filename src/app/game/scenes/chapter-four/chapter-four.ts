@@ -16,6 +16,7 @@ import { AnswerFeedback } from '../../../ui/answer-feedback/answer-feedback';
 import { PixelButton } from '../../../ui/pixel-button/pixel-button';
 import { PixelParticles } from '../../../ui/pixel-particles/pixel-particles';
 import { QuizProgress } from '../../../ui/quiz-progress/quiz-progress';
+import { HiddenDigit } from '../../../ui/hidden-digit/hidden-digit';
 import { QuizQuestionCard } from '../../../ui/quiz-question-card/quiz-question-card';
 import { QuizResult } from '../../../ui/quiz-result/quiz-result';
 
@@ -32,6 +33,7 @@ type Phase = 'intro' | 'question' | 'feedback' | 'result';
     QuizProgress,
     QuizQuestionCard,
     QuizResult,
+    HiddenDigit,
   ],
   template: `
     @switch (phase()) {
@@ -83,6 +85,7 @@ type Phase = 'intro' | 'question' | 'feedback' | 'result';
       @default {
         <div class="play">
           <header class="bar">
+            <span class="sector"><app-hidden-digit [chapter]="4" prefix="SECTOR " /></span>
             <app-quiz-progress
               [label]="copy.labels.database"
               [caption]="pad(index() + 1) + ' / ' + pad(total())"
@@ -210,9 +213,17 @@ type Phase = 'intro' | 'question' | 'feedback' | 'result';
     }
 
     .bar {
+      position: relative;
       flex: none;
       /* line the progress bar up with the cards below it */
       padding: 0 6px;
+    }
+
+    .sector {
+      position: absolute;
+      right: 2px;
+      bottom: -6px;
+      z-index: 2;
     }
 
     /*
